@@ -1,0 +1,453 @@
+<template><div><h1 id="故障排除" tabindex="-1"><a class="header-anchor" href="#故障排除"><span>故障排除</span></a></h1>
+<p>本章提供SecRandom软件使用过程中可能遇到的各类问题的详细解决方案，帮助您快速诊断并解决问题。如果您遇到的问题未在此处列出，请查阅<RouteLink to="/docs-Dev/08_faq/">常见问题</RouteLink>或联系技术支持。</p>
+<h2 id="_10-1-系统要求与兼容性" tabindex="-1"><a class="header-anchor" href="#_10-1-系统要求与兼容性"><span>10.1 系统要求与兼容性</span></a></h2>
+<h3 id="_10-1-1-最低系统要求" tabindex="-1"><a class="header-anchor" href="#_10-1-1-最低系统要求"><span>10.1.1 最低系统要求</span></a></h3>
+<ul>
+<li><strong>操作系统</strong>：
+<ul>
+<li>Windows: Windows 10 64位或更高版本</li>
+<li>macOS: macOS 10.15 (Catalina)或更高版本</li>
+<li>Linux: 内核5.4或更高版本的64位系统</li>
+</ul>
+</li>
+<li><strong>处理器</strong>：双核1.8GHz或更高</li>
+<li><strong>内存</strong>：至少2GB RAM</li>
+<li><strong>硬盘空间</strong>：至少100MB可用空间</li>
+<li><strong>其他</strong>：显示器分辨率1366×768或更高，互联网连接（仅用于更新和插件下载）</li>
+</ul>
+<h3 id="_10-1-2-推荐系统配置" tabindex="-1"><a class="header-anchor" href="#_10-1-2-推荐系统配置"><span>10.1.2 推荐系统配置</span></a></h3>
+<ul>
+<li><strong>操作系统</strong>：
+<ul>
+<li>Windows: Windows 11 64位</li>
+<li>macOS: macOS 12 (Monterey)或更高版本</li>
+<li>Linux: 内核5.15或更高版本的64位系统</li>
+</ul>
+</li>
+<li><strong>处理器</strong>：四核2.5GHz或更高</li>
+<li><strong>内存</strong>：4GB RAM或更高</li>
+<li><strong>硬盘空间</strong>：500MB可用空间（含缓存和备份）</li>
+<li><strong>显卡</strong>：支持OpenGL 3.3或更高版本的显卡（用于高级图形效果）</li>
+</ul>
+<h3 id="_10-1-3-兼容性注意事项" tabindex="-1"><a class="header-anchor" href="#_10-1-3-兼容性注意事项"><span>10.1.3 兼容性注意事项</span></a></h3>
+<ul>
+<li><strong>Windows</strong>：
+<ul>
+<li>不支持Windows XP、Vista、7和8系统</li>
+<li>在Windows 10/11家庭版、专业版和企业版上测试通过</li>
+<li>兼容Windows Server 2019及以上版本（需启用桌面体验）</li>
+</ul>
+</li>
+<li><strong>macOS</strong>：
+<ul>
+<li>基于Apple Silicon和Intel芯片的Mac均支持</li>
+<li>不支持32位应用模式</li>
+</ul>
+</li>
+<li><strong>Linux</strong>：<br>
+官方支持以下发行版：
+<ul>
+<li>Ubuntu 20.04 LTS及以上</li>
+<li>Fedora 34及以上</li>
+<li>Debian 11及以上</li>
+<li>Arch Linux（最新稳定版）</li>
+<li>其他发行版可能需要手动解决依赖问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="_10-2-安装与启动问题" tabindex="-1"><a class="header-anchor" href="#_10-2-安装与启动问题"><span>10.2 安装与启动问题</span></a></h2>
+<h3 id="_10-2-1-安装失败" tabindex="-1"><a class="header-anchor" href="#_10-2-1-安装失败"><span>10.2.1 安装失败</span></a></h3>
+<h4 id="错误症状与原因" tabindex="-1"><a class="header-anchor" href="#错误症状与原因"><span>错误症状与原因</span></a></h4>
+<ul>
+<li><strong>安装程序无法启动</strong>：系统缺少必要的运行时组件</li>
+<li><strong>安装过程中报错</strong>：权限不足或磁盘空间不足</li>
+<li><strong>安装完成后无快捷方式</strong>：安装路径包含非ASCII字符或安装被安全软件拦截</li>
+<li><strong>安装回滚</strong>：系统组件冲突或之前版本未完全卸载</li>
+</ul>
+<h4 id="解决方案" tabindex="-1"><a class="header-anchor" href="#解决方案"><span>解决方案</span></a></h4>
+<ol>
+<li><strong>运行时组件问题</strong>：
+<ul>
+<li>安装<a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" target="_blank" rel="noopener noreferrer">Visual C++ Redistributable 2015-2022</a></li>
+<li>安装<a href="https://dotnet.microsoft.com/download/dotnet-framework/net48" target="_blank" rel="noopener noreferrer">.NET Framework 4.8</a></li>
+</ul>
+</li>
+<li><strong>权限问题</strong>：
+<ul>
+<li>右键点击安装程序，选择「以管理员身份运行」</li>
+<li>确保当前用户有管理员权限</li>
+</ul>
+</li>
+<li><strong>磁盘空间</strong>：
+<ul>
+<li>至少需要100MB可用空间</li>
+<li>清理临时文件：运行<code v-pre>cleanmgr.exe</code>（Windows）或使用系统清理工具</li>
+</ul>
+</li>
+<li><strong>残留文件问题</strong>：
+<ul>
+<li>使用<a href="https://www.revouninstaller.com/" target="_blank" rel="noopener noreferrer">Revo Uninstaller</a>彻底卸载旧版本</li>
+<li>手动删除残留文件夹：<code v-pre>C:\Program Files\SecRandom</code>和<code v-pre>%APPDATA%\SecRandom</code></li>
+</ul>
+</li>
+<li><strong>安全软件拦截</strong>：
+<ul>
+<li>暂时禁用杀毒软件和防火墙</li>
+<li>将安装程序添加到信任列表</li>
+</ul>
+</li>
+</ol>
+<h3 id="_10-2-2-启动失败" tabindex="-1"><a class="header-anchor" href="#_10-2-2-启动失败"><span>10.2.2 启动失败</span></a></h3>
+<h4 id="常见错误及解决方法" tabindex="-1"><a class="header-anchor" href="#常见错误及解决方法"><span>常见错误及解决方法</span></a></h4>
+<table>
+<thead>
+<tr>
+<th>错误信息</th>
+<th>可能原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;无法找到Python环境&quot;</td>
+<td>Python未安装或环境变量未配置</td>
+<td>安装Python 3.8-3.11并勾选&quot;Add Python to PATH&quot;</td>
+</tr>
+<tr>
+<td>&quot;缺少Qt5Core.dll&quot;</td>
+<td>Qt运行时未安装</td>
+<td>安装<a href="https://download.qt.io/official_releases/qt/5.15/5.15.2/qt-opensource-windows-x86-5.15.2.exe" target="_blank" rel="noopener noreferrer">Qt5运行时</a></td>
+</tr>
+<tr>
+<td>&quot;应用程序无法正常启动(0xc000007b)&quot;</td>
+<td>32位与64位版本不匹配</td>
+<td>下载与系统匹配的软件版本</td>
+</tr>
+<tr>
+<td>&quot;数据库连接失败&quot;</td>
+<td>数据库文件损坏</td>
+<td>删除<code v-pre>%APPDATA%\SecRandom\data.db</code>后重启软件</td>
+</tr>
+<tr>
+<td>无任何反应</td>
+<td>配置文件损坏</td>
+<td>删除<code v-pre>%APPDATA%\SecRandom\config.json</code>后重启</td>
+</tr>
+</tbody>
+</table>
+<h4 id="高级诊断步骤" tabindex="-1"><a class="header-anchor" href="#高级诊断步骤"><span>高级诊断步骤</span></a></h4>
+<ol>
+<li><strong>以安全模式启动</strong>：
+<ul>
+<li>按住Shift键双击软件图标</li>
+<li>选择「安全模式」启动（禁用插件和高级功能）</li>
+</ul>
+</li>
+<li><strong>查看启动日志</strong>：
+<ul>
+<li>日志文件位置：<code v-pre>%APPDATA%\SecRandom\logs\startup.log</code></li>
+<li>查找包含&quot;ERROR&quot;或&quot;EXCEPTION&quot;的行</li>
+</ul>
+</li>
+<li><strong>命令行启动</strong>：
+<ul>
+<li>打开命令提示符，导航到安装目录</li>
+<li>运行<code v-pre>SecRandom.exe --debug</code>查看详细输出</li>
+</ul>
+</li>
+<li><strong>系统兼容性疑难解答</strong>：
+<ul>
+<li>右键点击可执行文件→「属性」→「兼容性」</li>
+<li>勾选「以兼容模式运行这个程序」并选择推荐系统</li>
+<li>勾选「以管理员身份运行此程序」</li>
+</ul>
+</li>
+</ol>
+<h2 id="_10-3-功能使用问题" tabindex="-1"><a class="header-anchor" href="#_10-3-功能使用问题"><span>10.3 功能使用问题</span></a></h2>
+<h3 id="_10-3-1-随机选择功能异常" tabindex="-1"><a class="header-anchor" href="#_10-3-1-随机选择功能异常"><span>10.3.1 随机选择功能异常</span></a></h3>
+<h4 id="问题表现" tabindex="-1"><a class="header-anchor" href="#问题表现"><span>问题表现</span></a></h4>
+<ul>
+<li>抽取结果重复率异常高</li>
+<li>概率设置不生效</li>
+<li>抽取过程卡顿或无响应</li>
+<li>结果无法保存</li>
+</ul>
+<h4 id="解决方案-1" tabindex="-1"><a class="header-anchor" href="#解决方案-1"><span>解决方案</span></a></h4>
+<ol>
+<li><strong>重复率问题</strong>：
+<ul>
+<li>检查是否启用了&quot;允许重复选择&quot;选项（应在大多数场景下禁用）</li>
+<li>确保随机种子未被固定（在高级设置中）</li>
+<li>尝试「工具」→「重置随机数生成器」</li>
+</ul>
+</li>
+<li><strong>概率设置问题</strong>：
+<ul>
+<li>确认概率总和不为零</li>
+<li>检查是否有排除规则冲突</li>
+<li>重置为默认概率设置</li>
+</ul>
+</li>
+<li><strong>性能问题</strong>：
+<ul>
+<li>名单过大时分会批处理（建议单次不超过10万条）</li>
+<li>关闭动画效果（设置→外观→动画效果→关闭）</li>
+<li>清理历史记录（历史→清理历史数据）</li>
+</ul>
+</li>
+<li><strong>结果保存问题</strong>：
+<ul>
+<li>检查磁盘写入权限</li>
+<li>确认磁盘未满</li>
+<li>运行「工具」→「修复数据库」</li>
+</ul>
+</li>
+</ol>
+<h3 id="_10-3-2-数据导入导出问题" tabindex="-1"><a class="header-anchor" href="#_10-3-2-数据导入导出问题"><span>10.3.2 数据导入导出问题</span></a></h3>
+<h4 id="导入问题" tabindex="-1"><a class="header-anchor" href="#导入问题"><span>导入问题</span></a></h4>
+<ul>
+<li><strong>文件格式错误</strong>：确保使用支持的格式（TXT/CSV/XLSX/JSON）</li>
+<li><strong>编码问题</strong>：使用UTF-8编码保存文件</li>
+<li><strong>权限问题</strong>：文件可能被其他程序锁定</li>
+<li><strong>数据格式错误</strong>：检查是否有特殊字符或格式错误</li>
+</ul>
+<h4 id="导出问题" tabindex="-1"><a class="header-anchor" href="#导出问题"><span>导出问题</span></a></h4>
+<ul>
+<li><strong>导出文件为空</strong>：可能筛选条件导致无数据</li>
+<li><strong>导出失败</strong>：目标路径可能不存在或无写入权限</li>
+<li><strong>格式错乱</strong>：尝试其他导出格式或更新软件到最新版本</li>
+</ul>
+<h4 id="高级解决方案" tabindex="-1"><a class="header-anchor" href="#高级解决方案"><span>高级解决方案</span></a></h4>
+<ol>
+<li><strong>使用导入向导</strong>：
+<ul>
+<li>选择「文件」→「导入」→「导入向导」</li>
+<li>按照向导步骤检查并修复文件格式</li>
+</ul>
+</li>
+<li><strong>测试文件诊断</strong>：
+<ul>
+<li>使用<a href="https://github.com/SECTL/SecRandom/raw/main/examples/sample_list.csv" target="_blank" rel="noopener noreferrer">示例文件</a>测试导入功能</li>
+<li>如示例文件正常，则问题出在您的文件格式</li>
+</ul>
+</li>
+<li><strong>导出路径问题</strong>：
+<ul>
+<li>尝试导出到不同路径（如桌面）</li>
+<li>避免使用包含空格或特殊字符的路径</li>
+</ul>
+</li>
+<li><strong>日志分析</strong>：
+<ul>
+<li>查看导入/导出日志：<code v-pre>%APPDATA%\SecRandom\logs\io.log</code></li>
+<li>搜索&quot;ERROR&quot;查找具体问题</li>
+</ul>
+</li>
+</ol>
+<h2 id="_10-4-性能问题" tabindex="-1"><a class="header-anchor" href="#_10-4-性能问题"><span>10.4 性能问题</span></a></h2>
+<h3 id="_10-4-1-软件卡顿" tabindex="-1"><a class="header-anchor" href="#_10-4-1-软件卡顿"><span>10.4.1 软件卡顿</span></a></h3>
+<h4 id="症状与原因" tabindex="-1"><a class="header-anchor" href="#症状与原因"><span>症状与原因</span></a></h4>
+<ul>
+<li>界面响应缓慢</li>
+<li>操作延迟超过2秒</li>
+<li>抽取动画卡顿</li>
+<li>高CPU或内存占用</li>
+</ul>
+<h4 id="优化方案" tabindex="-1"><a class="header-anchor" href="#优化方案"><span>优化方案</span></a></h4>
+<ol>
+<li><strong>基础优化</strong>：
+<ul>
+<li>关闭其他占用资源的程序</li>
+<li>重启软件</li>
+<li>更新显卡驱动</li>
+</ul>
+</li>
+<li><strong>软件设置优化</strong>：
+<ul>
+<li>降低动画质量：设置→外观→动画质量→低</li>
+<li>减少历史记录保留：设置→历史记录→保留最近3个月</li>
+<li>禁用不必要的插件：设置→插件→禁用未使用的插件</li>
+</ul>
+</li>
+<li><strong>大数据优化</strong>：
+<ul>
+<li>名单超过10万条时启用分页加载</li>
+<li>使用筛选功能减少当前显示数据量</li>
+<li>定期清理无用名单</li>
+</ul>
+</li>
+<li><strong>系统优化</strong>：
+<ul>
+<li>增加虚拟内存：系统属性→高级→性能→设置→高级→虚拟内存→更改</li>
+<li>磁盘碎片整理（机械硬盘）</li>
+<li>关闭Windows索引服务（针对软件安装目录）</li>
+</ul>
+</li>
+</ol>
+<h3 id="_10-4-2-内存占用过高" tabindex="-1"><a class="header-anchor" href="#_10-4-2-内存占用过高"><span>10.4.2 内存占用过高</span></a></h3>
+<h4 id="问题分析" tabindex="-1"><a class="header-anchor" href="#问题分析"><span>问题分析</span></a></h4>
+<p>SecRandom正常运行时内存占用通常在50-200MB之间，如持续超过500MB则属于异常情况。</p>
+<h4 id="解决方案-2" tabindex="-1"><a class="header-anchor" href="#解决方案-2"><span>解决方案</span></a></h4>
+<ol>
+<li><strong>内存泄漏问题</strong>：
+<ul>
+<li>更新到最新版本（许多内存泄漏问题会在新版本中修复）</li>
+<li>定期重启软件释放内存</li>
+</ul>
+</li>
+<li><strong>大数据集处理</strong>：
+<ul>
+<li>将超过10万条的名单拆分为多个小名单</li>
+<li>使用「分批处理」模式</li>
+</ul>
+</li>
+<li><strong>诊断内存问题</strong>：
+<ul>
+<li>启用内存监控：设置→高级→开发者选项→内存监控</li>
+<li>记录哪些操作导致内存急剧增加</li>
+<li>将内存日志发送给技术支持：support@secrandom.org</li>
+</ul>
+</li>
+</ol>
+<h2 id="_10-5-高级故障排除" tabindex="-1"><a class="header-anchor" href="#_10-5-高级故障排除"><span>10.5 高级故障排除</span></a></h2>
+<h3 id="_10-5-1-数据库问题" tabindex="-1"><a class="header-anchor" href="#_10-5-1-数据库问题"><span>10.5.1 数据库问题</span></a></h3>
+<h4 id="常见数据库错误" tabindex="-1"><a class="header-anchor" href="#常见数据库错误"><span>常见数据库错误</span></a></h4>
+<ul>
+<li><strong>数据库损坏</strong>：软件可能无法启动或数据丢失</li>
+<li><strong>数据库锁定</strong>：无法写入数据或操作卡顿</li>
+<li><strong>数据库过大</strong>：性能下降</li>
+</ul>
+<h4 id="数据库修复步骤" tabindex="-1"><a class="header-anchor" href="#数据库修复步骤"><span>数据库修复步骤</span></a></h4>
+<ol>
+<li><strong>备份数据</strong>（如可能）：
+<ul>
+<li>复制<code v-pre>%APPDATA%\SecRandom\data.db</code>到安全位置</li>
+</ul>
+</li>
+<li><strong>使用内置修复工具</strong>：
+<ul>
+<li>启动软件→设置→高级→数据库维护→修复数据库</li>
+</ul>
+</li>
+<li><strong>手动修复</strong>：
+<ul>
+<li>下载并安装<a href="https://sqlitestudio.pl/" target="_blank" rel="noopener noreferrer">SQLite Studio</a></li>
+<li>打开数据文件：<code v-pre>%APPDATA%\SecRandom\data.db</code></li>
+<li>执行维护命令：<code v-pre>PRAGMA integrity_check;</code></li>
+<li>如发现错误，执行：<code v-pre>PRAGMA repair;</code></li>
+</ul>
+</li>
+<li><strong>重建数据库</strong>：
+<ul>
+<li>导出所有数据：文件→导出所有数据</li>
+<li>删除损坏的数据库文件</li>
+<li>重启软件创建新数据库</li>
+<li>导入之前导出的数据</li>
+</ul>
+</li>
+</ol>
+<h3 id="_10-5-2-高级日志分析" tabindex="-1"><a class="header-anchor" href="#_10-5-2-高级日志分析"><span>10.5.2 高级日志分析</span></a></h3>
+<h4 id="日志文件位置" tabindex="-1"><a class="header-anchor" href="#日志文件位置"><span>日志文件位置</span></a></h4>
+<ul>
+<li><strong>Windows</strong>：<code v-pre>%APPDATA%\SecRandom\logs</code></li>
+<li><strong>macOS</strong>：<code v-pre>~/Library/Logs/SecRandom</code></li>
+<li><strong>Linux</strong>：<code v-pre>~/.local/share/SecRandom/logs</code></li>
+</ul>
+<h4 id="关键日志文件" tabindex="-1"><a class="header-anchor" href="#关键日志文件"><span>关键日志文件</span></a></h4>
+<ul>
+<li><code v-pre>startup.log</code>：启动过程日志</li>
+<li><code v-pre>error.log</code>：错误日志</li>
+<li><code v-pre>debug.log</code>：调试日志（需在设置中启用）</li>
+<li><code v-pre>io.log</code>：导入/导出操作日志</li>
+<li><code v-pre>plugin.log</code>：插件相关日志</li>
+</ul>
+<h4 id="日志分析工具" tabindex="-1"><a class="header-anchor" href="#日志分析工具"><span>日志分析工具</span></a></h4>
+<ul>
+<li>使用<a href="https://www.logviewer.com/" target="_blank" rel="noopener noreferrer">Log Viewer</a>打开日志文件</li>
+<li>搜索关键词：ERROR, WARNING, EXCEPTION, FAILED</li>
+<li>分析错误发生时间和上下文</li>
+<li>将相关日志片段发送给技术支持</li>
+</ul>
+<h3 id="_10-5-3-命令行工具" tabindex="-1"><a class="header-anchor" href="#_10-5-3-命令行工具"><span>10.5.3 命令行工具</span></a></h3>
+<p>SecRandom提供命令行工具用于故障排除：</p>
+<div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-bash"><span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 检查系统兼容性</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">SecRandom-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --check-system</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 验证安装完整性</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">SecRandom-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --verify-install</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 修复数据库</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">SecRandom-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --repair-db</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 导出数据（紧急恢复）</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">SecRandom-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --export-data</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379"> backup.zip</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 查看软件信息</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">SecRandom-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --info</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 启用调试模式并启动</span></span>
+<span class="line"><span style="--shiki-light:#4078F2;--shiki-dark:#61AFEF">SecRandom-cli</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> --debug</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_10-6-获取技术支持" tabindex="-1"><a class="header-anchor" href="#_10-6-获取技术支持"><span>10.6 获取技术支持</span></a></h2>
+<h3 id="_10-6-1-准备支持请求" tabindex="-1"><a class="header-anchor" href="#_10-6-1-准备支持请求"><span>10.6.1 准备支持请求</span></a></h3>
+<p>联系技术支持前，请准备以下信息：</p>
+<ol>
+<li>软件版本（帮助→关于→版本信息）</li>
+<li>操作系统版本及位数</li>
+<li>问题复现步骤</li>
+<li>错误截图（如可能）</li>
+<li>相关日志文件</li>
+<li>系统信息：运行<code v-pre>msinfo32.exe</code>（Windows）并保存报告</li>
+</ol>
+<h3 id="_10-6-2-支持渠道" tabindex="-1"><a class="header-anchor" href="#_10-6-2-支持渠道"><span>10.6.2 支持渠道</span></a></h3>
+<ul>
+<li>
+<p><strong>GitHub Issues</strong>：<a href="https://github.com/SECTL/SecRandom/issues" target="_blank" rel="noopener noreferrer">提交问题</a>（推荐）</p>
+<ul>
+<li>提供详细问题描述和复现步骤</li>
+<li>附上相关日志和截图</li>
+<li>标签使用：<code v-pre>bug</code>, <code v-pre>help-wanted</code>, <code v-pre>support</code></li>
+</ul>
+</li>
+<li>
+<p><strong>邮件支持</strong>：support@secrandom.org</p>
+<ul>
+<li>邮件主题格式：<code v-pre>[支持请求] 简短问题描述</code></li>
+<li>附件包含必要的日志和截图</li>
+</ul>
+</li>
+<li>
+<p><strong>社区论坛</strong>：<a href="https://forum.secrandom.org" target="_blank" rel="noopener noreferrer">forum.secrandom.org</a></p>
+<ul>
+<li>在「技术支持」板块发布问题</li>
+<li>提供详细信息，以便其他用户和开发者帮助解决</li>
+</ul>
+</li>
+<li>
+<p><strong>实时支持</strong>（高级用户）：</p>
+<ul>
+<li>加入Discord服务器：<a href="https://discord.gg/secrandom" target="_blank" rel="noopener noreferrer">discord.gg/secrandom</a></li>
+<li>工作日9:00-18:00提供实时支持</li>
+</ul>
+</li>
+</ul>
+<h3 id="_10-6-3-远程协助" tabindex="-1"><a class="header-anchor" href="#_10-6-3-远程协助"><span>10.6.3 远程协助</span></a></h3>
+<p>对于复杂问题，可申请远程协助：</p>
+<ol>
+<li>在GitHub Issues或邮件中请求远程协助</li>
+<li>提供基本系统信息和问题描述</li>
+<li>技术人员会回复可用时间段</li>
+<li>通过<a href="https://www.teamviewer.com/" target="_blank" rel="noopener noreferrer">TeamViewer</a>或<a href="https://anydesk.com/" target="_blank" rel="noopener noreferrer">AnyDesk</a>进行远程协助</li>
+<li>协助过程会全程记录，保护用户隐私</li>
+</ol>
+<h2 id="_10-7-常见问题参考" tabindex="-1"><a class="header-anchor" href="#_10-7-常见问题参考"><span>10.7 常见问题参考</span></a></h2>
+<p>如遇到其他问题，可参考以下资源：</p>
+<ul>
+<li><RouteLink to="/docs-Dev/08_faq/">常见问题（FAQ）</RouteLink>章节</li>
+<li><a href="https://github.com/SECTL/SecRandom/issues?q=is%3Aissue+is%3Aclosed" target="_blank" rel="noopener noreferrer">GitHub问题库</a>（已解决问题）</li>
+<li><a href="https://docs.secrandom.org/knowledge-base" target="_blank" rel="noopener noreferrer">知识库文章</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLkMf14VQJ0-7kTPHhJnJjG3eJhHcGQJ8s" target="_blank" rel="noopener noreferrer">视频教程</a>（包含常见问题解决方法）</li>
+</ul>
+<p>如果您发现了软件bug，请通过GitHub Issues报告，帮助我们改进软件。报告时请包含详细的复现步骤、系统信息和相关日志。</p>
+</div></template>
+
+

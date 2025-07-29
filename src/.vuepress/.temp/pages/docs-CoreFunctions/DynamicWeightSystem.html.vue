@@ -1,0 +1,61 @@
+<template><div><h1 id="动态权重系统" tabindex="-1"><a class="header-anchor" href="#动态权重系统"><span>动态权重系统</span></a></h1>
+<div class="hint-container warning">
+<p class="hint-container-title">注意</p>
+<p>本页面尚未完善，因此缺少图片描述，部分内容可能存在缺失和谬误，我们将陆续修正。</p>
+</div>
+<h2 id="公平抽取-介绍" tabindex="-1"><a class="header-anchor" href="#公平抽取-介绍"><span>公平抽取-介绍</span></a></h2>
+<blockquote>
+<p>公平抽取是一种随机抽取方式，它确保每个成员被抽取的权重由系统决定，从而避免不公平的结果。 这种方式适用于需要随机且公平的抽取学生回答问题或进行其他需要公平分配的场景。 SecRandom的公平抽取的实现基于动态权重系统，通过多个方面来进行权重的计算。</p>
+</blockquote>
+<h2 id="动态权重系统-1" tabindex="-1"><a class="header-anchor" href="#动态权重系统-1"><span>动态权重系统</span></a></h2>
+<p>动态权重是SecRandom的公平抽取的核心机制。 它通过以下几个方面来计算每个成员的权重：</p>
+<ul>
+<li>总抽取次数(被抽中次数越多权重越低)</li>
+<li>抽取各小组次数</li>
+<li>抽取各性别次数</li>
+<li>基础权重</li>
+<li>冷启动(防止新学生权重过低)</li>
+</ul>
+<h3 id="背后的逻辑实现-动态权重系统的逻辑" tabindex="-1"><a class="header-anchor" href="#背后的逻辑实现-动态权重系统的逻辑"><span>背后的逻辑实现:动态权重系统的逻辑</span></a></h3>
+<p><em>（以下内容建立在有历史记录的情况下）</em></p>
+<ol>
+<li>通过该学生抽取的总次数进行计算权重因子<div class="language-python line-numbers-mode" data-highlighter="shiki" data-ext="python" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-python"><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">frequency_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1.0</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> /</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> math.</span><span style="--shiki-light:#383A42;--shiki-dark:#61AFEF">sqrt</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(student_history[</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">"total_number_of_times"</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">] </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">*</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 2</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div></li>
+</ol>
+<ul>
+<li>解释：<code v-pre>1/[该学生被抽取的总次数]*2+1}</code>；例：该学生的被抽取的总次数为5次，则计算得：1.4</li>
+</ul>
+<ol start="2">
+<li>通过获取历史记录最底下的小组抽取次数进行计算权重因子（必须有3个小组的人被抽到才会计算，否则就为1）<div class="language-python line-numbers-mode" data-highlighter="shiki" data-ext="python" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-python"><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">group_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1.0</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> /</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> (group_history </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">*</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0.2</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div></li>
+</ol>
+<ul>
+<li>解释：<code v-pre>1/[该小组被抽取的总次数]*0.2+1</code>；例：该小组被抽取的总次数为15次，则计算得：1.0133...</li>
+</ul>
+<ol start="3">
+<li>通过获取历史记录最底下的性别抽取次数进行计算权重因子（必须有2个性别的人被抽到才会计算，否则就为1）<div class="language-python line-numbers-mode" data-highlighter="shiki" data-ext="python" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-python"><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">gender_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1.0</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> /</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> (gender_history </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">*</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0.2</span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2"> +</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 1</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div></div></div></li>
+</ol>
+<ul>
+<li>解释：<code v-pre>1/[该性别被抽取的总次数]*0.2+1</code>；例：该小组被抽取的总次数为50次，则计算得：1.004</li>
+</ul>
+<ol start="4">
+<li>冷启动机制，为了防止新加入的学生还没被抽到10次所以会有这个保护机制<div class="language-python line-numbers-mode" data-highlighter="shiki" data-ext="python" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-python"><span class="line"><span style="--shiki-light:#A626A4;--shiki-dark:#C678DD">if</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> current_round </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">&#x3C;</span><span style="--shiki-light:#383A42;--shiki-dark:#D19A66"> COLD_START_ROUNDS</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">:</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">frequency_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#0184BC;--shiki-dark:#56B6C2"> min</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">(</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66">0.8</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">, frequency_factor)</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div></div></div></li>
+</ol>
+<ul>
+<li>解释：当该学生抽到的轮数小于10轮则会进行最小为0.8限制计算</li>
+</ul>
+<ol start="5">
+<li>最终的数据处理，在进行这个计算前会执行以下计算，计算完成后会让该值处于一个范围区间内，以防止是值的过大或者过小<div class="language-python line-numbers-mode" data-highlighter="shiki" data-ext="python" style="--shiki-light:#383A42;--shiki-dark:#abb2bf;--shiki-light-bg:#FAFAFA;--shiki-dark-bg:#282c34"><pre class="shiki shiki-themes one-light one-dark-pro vp-code" v-pre=""><code class="language-python"><span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">student_weights </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">=</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF"> {</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">    base</span><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">': BASE_WEIGHT * 0.2,                    # 基础权重</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    'frequency'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: frequency_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">*</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 3.0</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,          </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 频率惩罚</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    'group'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: group_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">*</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0.8</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">,                  </span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic"># 小组平衡</span></span>
+<span class="line"><span style="--shiki-light:#50A14F;--shiki-dark:#98C379">    'gender'</span><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">: gender_factor </span><span style="--shiki-light:#383A42;--shiki-dark:#56B6C2">*</span><span style="--shiki-light:#986801;--shiki-dark:#D19A66"> 0.8</span><span style="--shiki-light:#A0A1A7;--shiki-light-font-style:italic;--shiki-dark:#7F848E;--shiki-dark-font-style:italic">                # 性别平衡</span></span>
+<span class="line"><span style="--shiki-light:#383A42;--shiki-dark:#ABB2BF">}</span></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></li>
+</ol>
+</div></template>
+
+
