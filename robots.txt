@@ -1,4 +1,0 @@
-User-agent:*
-Disallow:
-
-Sitemap: https://secrandom.netlify.app/sitemap.xml
